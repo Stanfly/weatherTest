@@ -1,0 +1,20 @@
+.beforeLoaded {
+    &.main-container {
+        background: #fff;
+        overflow: hidden;
+    }
+
+    .top-section {
+        top: -200px;
+    }
+
+    .main-section {
+        transform: scale(2);
+        opacity: 0;
+    }
+
+    .bottom-section {
+        bottom: -200px;
+    }
+
+}

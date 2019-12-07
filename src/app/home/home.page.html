@@ -1,14 +1,87 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
-  <div class="ion-padding">
-    The world is your oyster.
-    <p>If you get lost, the <a target="_blank" rel="noopener" href="https://ionicframework.com/docs/">docs</a> will be your guide.</p>
+  <div class="main-container" [ngClass]="{
+      'sun': store.weather.weather && store.weather.weather.code == 800, 
+      'beforeLoaded' : !loaded, 
+      'inputFocused' : store.inputFocused 
+    }">
+    <section class="top-section clearfix">
+
+      <div class="location" *ngIf="!store.cityInputVisible">
+        <div class="city-name">{{ store.weather?.city_name }}</div>
+        <button class="change-city ion-activatable" (click)="store.cityInputVisible = true">
+          Сменить город
+          <ion-ripple-effect type="unbounded"></ion-ripple-effect>
+        </button>
+        <button class="detect-city ion-activatable" (click)="detectLocation()">
+          Моё местоположение
+          <ion-ripple-effect type="unbounded"></ion-ripple-effect>
+        </button>
+      </div>
+      <div class="city-input__wrapper" *ngIf="store.cityInputVisible">
+        <input type="text" class="city-input" [(ngModel)]="store.cityName" (focus)="store.inputFocused=true"
+          (blur)="store.inputFocused=false">
+        <button class="city-input-btn ion-activatable" (click)="getWeatherByCityName(store.cityName)">
+          ОК
+          <ion-ripple-effect type="unbounded"></ion-ripple-effect>
+        </button>
+      </div>
+      <div class="measure">
+        <div class="degree-symbol">º</div>
+        <div class="btn-group ion-activatable">
+          <button class="btn btn-outline" [ngClass]="{ 'active': store.celsius }" (click)="toggleUnit()">C</button>
+          <ion-ripple-effect type="unbounded"></ion-ripple-effect>
+          <button class="btn btn-outline" [ngClass]="{ 'active': !store.celsius }" (click)="toggleUnit()">F</button>
+        </div>
+      </div>
+    </section>
+    <section class="main-section t">
+      <div class="tc vam">
+        <div class="weather-main" *ngIf="store.weather.temp">
+          <div class="weather-icon">
+            <img [src]="store.iconPath" [alt]="store.weather?.weather?.description">
+          </div>
+          <div class="weather-temperature">
+            {{ math.round(store.celsius ? store.weather?.temp : 1.8 * store.weather?.temp + 32)  }}
+          </div>
+          <div class="weather-describe">
+            {{ store.weather?.weather?.description }}
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="bottom-section">
+      <div class="weather-details">
+        <div class="weather-details__label">
+          Ветер
+        </div>
+        <div class="weather-details__info">
+          {{ math.round(store.weather?.wind_spd) }} м/с, {{ store.weather?.wind_cdir_full }}
+        </div>
+      </div>
+      <div class="weather-details">
+        <div class="weather-details__label">
+          Давление
+        </div>
+        <div class="weather-details__info">
+          {{ math.round(store.weather?.pres) }} мм рт. ст.
+        </div>
+      </div>
+      <div class="weather-details">
+        <div class="weather-details__label">
+          Влажность
+        </div>
+        <div class="weather-details__info">
+          {{ math.round(store.weather?.rh) }}%
+        </div>
+      </div>
+      <div class="weather-details">
+        <div class="weather-details__label">
+          УФ индекс
+        </div>
+        <div class="weather-details__info">
+          {{ math.round(store.weather?.uv) }}
+        </div>
+      </div>
+    </section>
   </div>
 </ion-content>
